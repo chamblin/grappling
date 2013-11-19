@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= @name %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <style type="text/css">
+	      body {
+	        padding-top: 20px;
+	        padding-bottom: 40px;
+	      }
+
+	      /* Custom container */
+	      .container-narrow {
+	        margin: 0 auto;
+	        max-width: 700px;
+	      }
+	      .container-narrow > hr {
+	        margin: 30px 0;
+	      }
+
+	      /* Main marketing message and sign up button */
+	      .jumbotron {
+	        margin: 60px 0;
+	        text-align: center;
+	        background: none;
+	      }
+	      .jumbotron h1 {
+	        font-size: 72px;
+	        line-height: 1;
+	      }
+	      .jumbotron .btn {
+	        font-size: 21px;
+	        padding: 14px 24px;
+	      }
+
+	      .form-control {
+	      	margin-top: 1em;
+	      	margin-bottom: 1em;
+	      	width: 50%;
+	      }
+      </style>
+  </head>
+  <body>
+  	<div class="container-narrow">
+  		<div class="jumbotron">
+    		<h1><%= @name %></h1>
+    		<form action="/c" method="POST" id="create_form">
+    		<% @fields.each do |f| %>
+	    		<% if f[:type] == "text" %>
+	    			<input type="text" class="form-control" placeholder="<%= f[:name].to_s.capitalize %>" name="<%= f[:name].to_s %>" />
+	    		<% elsif f[:type] == "select" %>
+	    		<% end %>
+    		<% end %>
+
+    		<button type="submit" class="btn btn-large btn-success">Create Webhook</a>
+    		</form>
+		</div>
+	</div>
+    <script src="js/bootstrap.min.js"></script>
+  </body>
+</html>

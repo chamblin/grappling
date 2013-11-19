@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+command = ARGV.shift
+file = ARGV.shift
+require 'grappling'
+
+if command == "go"
+	require File.join(".", file)
+	set :run, true
+elsif command == "do"
+	require File.join(".", file)
+	# run the work queue
+elsif command == "console"
+	require 'irb'
+	require File.join(".", file)
+	ARGV.clear
+	IRB.start
+else
+	puts "Usage: grapple [go|do] [file]"
+end
