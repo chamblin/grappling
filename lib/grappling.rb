@@ -4,6 +4,7 @@ require 'grappling/fields'
 require 'grappling/configuration'
 require 'grappling/job'
 require 'grappling/routes'
+require 'resque'
 
 # things that grappling users actually use
 
@@ -17,6 +18,7 @@ end
 
 def redis_url(url)
   GrapplingConfiguration.instance.redis_url = url
+  Resque.redis = GrapplingConfiguration.instance.redis
 end
 
 def name(n)

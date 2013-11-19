@@ -58,6 +58,4 @@ class GrapplingJob
         instance_variable_set("@%s" % k, @endpoint_params[k])
       end
     end
-
-
 end
