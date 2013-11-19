@@ -71,9 +71,31 @@ The application's name.  This is what is displayed on the hook creation page.
 
 The logo file.  This is read into memory at runtime and is served from e.g. /logo.png.  If it is provided, it is displayed on the hook creation page.
 
-##Technical Notes
-PagerDuty collapses a bunch of events into a single Webhook call.  We split them back out and make a task for each message.
 
 #Heroku
 
 Setting up a Grappling application on Heroku is super easy.
+
+
+#Other Random Notes
+
+##JSON Handling
+
+PagerDuty collapses a bunch of events into a single Webhook call.  We split them back out and make a task for each message.
+
+##To rebuild the gem
+
+    gem build grappling.gemspec
+    gem install grappling-[version].gem
+
+##Use ssh port forwarding to expose your development endpoint
+
+This sets up a tunnel so host:8888 forwards to localhost:4567
+
+    ssh -R *:8888:localhost:4567 username@host
+
+##Change the default port
+
+In development mode, Grappling runs on port 4567 (this is just Sinatra after all).  You can change this, or any other Sinatra option, as follows:
+
+    set :port, 80
