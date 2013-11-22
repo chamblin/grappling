@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Grappling : Grappling is a hacky DSL for working with PagerDuty's webhooks" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Grappling</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/chamblin/grappling">View on GitHub</a>
+
+          <h1 id="project_title">Grappling</h1>
+          <h2 id="project_tagline">Grappling is a hacky DSL for working with PagerDuty's webhooks</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/chamblin/grappling/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/chamblin/grappling/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="what" class="anchor" href="#what"><span class="octicon octicon-link"></span></a>What</h1>
+
+<p><em>DSL - A domain specific language, where code is written in one language and errors are given in another. --<a href="http://programmingisterrible.com/post/65781074112/devils-dictionary-of-programming">The Devil's Dictionary of Programming</a></em></p>
+
+<p>Grappling is a tiny, hacky DSL for inflatable Webhooks for Ruby and <a href="http://www.pagerduty.com/">PagerDuty</a>.  It uses <a href="http://www.sinatrarb.com/">Sinatra</a>, <a href="https://github.com/resque/resque">Resque</a>, and <a href="http://getbootstrap.com/">Bootstrap</a>.  Bring your own Redis install, or just get a free one from <a href="http://www.redistogo.com/">redis to go</a>.</p>
+
+<p>It is pretty OK for quick prototypes, one-off servers, and PagerDuty's hack days.</p>
+
+<h1>
+<a name="install" class="anchor" href="#install"><span class="octicon octicon-link"></span></a>Install</h1>
+
+<pre><code>gem install grappling
+</code></pre>
+
+<h1>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h1>
+
+<pre><code># example.rb
+require 'grappling'
+
+redis_url "redis://redistogo:password@whatever.redistogo.com:12345/"
+name "Grappling Example"
+
+fields do
+    textfield :email_address
+    choice :color, [:red, :blue, :green]
+end
+
+grapple do
+    if is_trigger?
+
+    end
+end
+</code></pre>
+
+<p>Then just run</p>
+
+<pre><code>grapple go example.rb
+</code></pre>
+
+<p>to start a webserver, and</p>
+
+<pre><code>grapple do example.rb
+</code></pre>
+
+<p>To run a queue worker</p>
+
+<h1>
+<a name="reference" class="anchor" href="#reference"><span class="octicon octicon-link"></span></a>Reference</h1>
+
+<h2>
+<a name="field-definitions" class="anchor" href="#field-definitions"><span class="octicon octicon-link"></span></a>Field Definitions</h2>
+
+<h3>
+<a name="textfield" class="anchor" href="#textfield"><span class="octicon octicon-link"></span></a>textfield</h3>
+
+<h3>
+<a name="select" class="anchor" href="#select"><span class="octicon octicon-link"></span></a>select</h3>
+
+<h2>
+<a name="the-worker" class="anchor" href="#the-worker"><span class="octicon octicon-link"></span></a>The Worker</h2>
+
+<h3>
+<a name="instance-variables" class="anchor" href="#instance-variables"><span class="octicon octicon-link"></span></a>instance variables</h3>
+
+<h3>
+<a name="is_trigger-is_acknowledge-is_resolve" class="anchor" href="#is_trigger-is_acknowledge-is_resolve"><span class="octicon octicon-link"></span></a>is_trigger?, is_acknowledge?, is_resolve?</h3>
+
+<h3>
+<a name="description" class="anchor" href="#description"><span class="octicon octicon-link"></span></a>description</h3>
+
+<h3>
+<a name="user" class="anchor" href="#user"><span class="octicon octicon-link"></span></a>user</h3>
+
+<p>:email, :name</p>
+
+<h2>
+<a name="helper-and-configuration-methods" class="anchor" href="#helper-and-configuration-methods"><span class="octicon octicon-link"></span></a>Helper and Configuration Methods</h2>
+
+<h3>
+<a name="redis_url" class="anchor" href="#redis_url"><span class="octicon octicon-link"></span></a>redis_url</h3>
+
+<p>redis_url configures the URL where Redis is set up, along with authentication details.  e.g. redis://username:password@host:port/.  The username is ignored because Redis doesn't support usernames.</p>
+
+<h3>
+<a name="name" class="anchor" href="#name"><span class="octicon octicon-link"></span></a>name</h3>
+
+<p>The application's name.  This is what is displayed on the hook creation page.</p>
+
+<h3>
+<a name="logo" class="anchor" href="#logo"><span class="octicon octicon-link"></span></a>logo</h3>
+
+<p>The logo file.  This is read into memory at runtime and is served from e.g. /logo.png.  If it is provided, it is displayed on the hook creation page.</p>
+
+<h1>
+<a name="heroku" class="anchor" href="#heroku"><span class="octicon octicon-link"></span></a>Heroku</h1>
+
+<p>Setting up a Grappling application on Heroku is super easy.</p>
+
+<h1>
+<a name="other-random-notes" class="anchor" href="#other-random-notes"><span class="octicon octicon-link"></span></a>Other Random Notes</h1>
+
+<h2>
+<a name="json-handling" class="anchor" href="#json-handling"><span class="octicon octicon-link"></span></a>JSON Handling</h2>
+
+<p>PagerDuty collapses a bunch of events into a single Webhook call.  We split them back out and make a task for each message.</p>
+
+<h2>
+<a name="to-rebuild-the-gem" class="anchor" href="#to-rebuild-the-gem"><span class="octicon octicon-link"></span></a>To rebuild the gem</h2>
+
+<pre><code>gem build grappling.gemspec
+gem install grappling-[version].gem
+</code></pre>
+
+<h2>
+<a name="use-ssh-port-forwarding-to-expose-your-development-endpoint" class="anchor" href="#use-ssh-port-forwarding-to-expose-your-development-endpoint"><span class="octicon octicon-link"></span></a>Use ssh port forwarding to expose your development endpoint</h2>
+
+<p>This sets up a tunnel so host:8888 forwards to localhost:4567</p>
+
+<pre><code>ssh -R *:8888:localhost:4567 username@host
+</code></pre>
+
+<h2>
+<a name="change-the-default-port" class="anchor" href="#change-the-default-port"><span class="octicon octicon-link"></span></a>Change the default port</h2>
+
+<p>In development mode, Grappling runs on port 4567 (this is just Sinatra after all).  You can change this, or any other Sinatra option, as follows:</p>
+
+<pre><code>set :port, 80
+</code></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Grappling maintained by <a href="https://github.com/chamblin">chamblin</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
