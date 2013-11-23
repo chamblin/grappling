@@ -23,6 +23,8 @@ end
 
 def name(n)
   GrapplingConfiguration.instance.name = n
+  new_queue = ("default_%s" % n.downcase.gsub(/[^a-z0-9]/, '_')).to_sym
+  GrapplingJob.instance_variable_set("@queue", new_queue)
 end
 
 # override the views and public directory to refer to the gem's directory

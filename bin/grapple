@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+require "rake"
+require "resque/tasks"
 
 command = ARGV.shift
 file = ARGV.shift
@@ -9,7 +11,11 @@ if command == "go"
 	set :run, true
 elsif command == "do"
 	require File.join(".", file)
+	app = Rake.application
+	app.init
 	# run the work queue
+	ENV["QUEUE"] = GrapplingJob.instance_variable_get("@queue").to_s
+	app['resque:work'].invoke
 elsif command == "console"
 	require 'irb'
 	require File.join(".", file)

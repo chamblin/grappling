@@ -1,8 +1,25 @@
 require 'securerandom'
 require 'grappling/pd-json'
 
+module GrapplingHelpers
+  def find_hook_settings(hook_id)
+    result = GrapplingConfiguration.instance.redis.hgetall(hook_id)
+    result.empty? ? nil : result
+  end
+
+  def user_fields
+    GrapplingFields.instance.fields
+  end
+
+  def hook_url(hook_id)
+    "%s/h/%s" % [request.base_url, hook_id]
+  end
+end
+
+helpers GrapplingHelpers
+
 get "/" do
-  @fields = GrapplingHelpers.user_fields
+  @fields = user_fields
   @name = GrapplingConfiguration.instance.name
   erb :index
 end
@@ -39,19 +56,3 @@ post "/h/:hook_id" do
   halt 200
 end
 
-module GrapplingHelpers
-  def find_hook_settings(hook_id)
-    result = GrapplingConfiguration.instance.redis.hgetall(hook_id)
-    result.empty? ? nil : result
-  end
-
-  def user_fields
-    GrapplingFields.instance.fields
-  end
-
-  def hook_url(hook_id)
-    "%s/h/%s" % [request.base_url, hook_id]
-  end
-end
-
-helpers GrapplingHelpers

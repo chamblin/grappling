@@ -5,6 +5,7 @@ require 'grappling/configuration'
 class GrapplingJob
 
   @queue = :default
+
   include GrapplingHelpers
 
   def initialize(hook_id, body)
