@@ -1,16 +1,11 @@
 require 'sinatra'
 require 'singleton'
-require 'grappling/fields'
 require 'grappling/configuration'
 require 'grappling/job'
 require 'grappling/routes'
 require 'resque'
 
 # things that grappling users actually use
-
-def fields(&block)
-  GrapplingFields.instance.go(&block)
-end
 
 def grapple(&block)
   GrapplingJob.set_me_up(&block)

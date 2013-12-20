@@ -1,53 +1,21 @@
 require 'securerandom'
 require 'grappling/pd-json'
+require 'logger'
 
-module GrapplingHelpers
-  def find_hook_settings(hook_id)
-    result = GrapplingConfiguration.instance.redis.hgetall(hook_id)
-    result.empty? ? nil : result
-  end
-
-  def user_fields
-    GrapplingFields.instance.fields
-  end
-
-  def hook_url(hook_id)
-    "%s/h/%s" % [request.base_url, hook_id]
-  end
-end
-
-helpers GrapplingHelpers
+log = Logger.new(STDOUT)
 
 get "/" do
-  @fields = user_fields
   @name = GrapplingConfiguration.instance.name
   erb :index
 end
 
-post "/c" do
-  key = SecureRandom.hex # hopefully random enough
-
-  fields = {}
-
-  user_fields.each do |field|
-    fields[field[:name]] = params[field[:name]]
-  end
-
-  GrapplingConfiguration.instance.redis.hmset(key, {"exists" => true}.merge(fields).to_a.flatten)
-
-  @url = hook_url(key)
-end
-
-post "/h/:hook_id" do
-  hook_settings = find_hook_settings(params[:hook_id])
-
-  if hook_settings.nil?
-    halt 404
-  end
-
+post "/" do
   begin
-    PDJSON::Webhook.new(request.body.read).messages.each do |message|
-      Resque.enqueue(GrapplingJob, params[:hook_id], message.to_json)
+    body = request.body.read
+    log.debug(body)
+    PDJSON::Webhook.new(body).messages.each do |message|
+      Resque.enqueue(GrapplingJob, message.to_json)
+      log.info("Enqueued: " + message.to_json.inspect)
     end
   rescue
     halt 500

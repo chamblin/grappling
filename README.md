@@ -18,14 +18,9 @@ It is pretty OK for quick prototypes, one-off servers, and PagerDuty's hack days
     redis_url "redis://redistogo:password@whatever.redistogo.com:12345/"
     name "Grappling Example"
 
-    fields do
-        textfield :email_address
-        choice :color, [:red, :blue, :green]
-    end
-
     grapple do
         if is_trigger?
-        
+          # do something interesting here
         end
     end
 
@@ -39,23 +34,23 @@ to start a webserver, and
 
 To run a queue worker
 
-#Reference
-
-##Field Definitions
-###textfield
-
-###select
-
-
 ##The Worker
-###instance variables
 
-###is\_trigger?, is\_acknowledge?, is\_resolve?
+###is\_trigger?, is\_acknowledge?, is\_resolve?, is\_unacknowledge?, is\_assign?, is\_escalate?, is\_delegate?
+
+Predicates of the message that let you know the trigger type.
 
 ###description
 
+The message's description
+
 ###user
-:email, :name
+
+`user` is a hash that contains stuff related to the assigned\_to (or, as appropriate the resolved\_by).  `:email` and `:name` are two useful fields in this hash.
+
+###message
+
+A hash version of the Webhook message sent by PagerDuty.
 
 
 ##Helper and Configuration Methods
@@ -65,11 +60,7 @@ redis_url configures the URL where Redis is set up, along with authentication de
 
 ###name
 
-The application's name.  This is what is displayed on the hook creation page.
-
-###logo
-
-The logo file.  This is read into memory at runtime and is served from e.g. /logo.png.  If it is provided, it is displayed on the hook creation page.
+The application's name.  It's important and should be unique on the redis url you use.
 
 
 #Heroku

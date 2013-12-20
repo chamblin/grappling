@@ -46,16 +46,7 @@
   	<div class="container-narrow">
   		<div class="jumbotron">
     		<h1><%= @name %></h1>
-    		<form action="/c" method="POST" id="create_form">
-    		<% @fields.each do |f| %>
-	    		<% if f[:type] == "text" %>
-	    			<input type="text" class="form-control" placeholder="<%= f[:name].to_s.capitalize %>" name="<%= f[:name].to_s %>" />
-	    		<% elsif f[:type] == "select" %>
-	    		<% end %>
-    		<% end %>
-
-    		<button type="submit" class="btn btn-large btn-success">Create Webhook</a>
-    		</form>
+    		<h3>(your address bar is your webhook url)</h3>
 		</div>
 	</div>
     <script src="js/bootstrap.min.js"></script>
