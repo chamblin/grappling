@@ -52,7 +52,11 @@ class PDJSON
 			end
 
 			def user_hash
-				@json["data"]["incident"]["assigned_to_user"] || @json["data"]["incident"]["resolved_by_user"]
+				if is_resolve?
+					@json["data"]["incident"]["resolved_by_user"]
+				else
+					@json["data"]["incident"]["assigned_to_user"]
+				end
 			end
 	end
 end
