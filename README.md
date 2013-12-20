@@ -65,8 +65,16 @@ The application's name.  It's important and should be unique on the redis url yo
 
 #Heroku
 
-Setting up a Grappling application on Heroku is super easy.
+Setting up a Grappling application on Heroku is super easy.  Mostly, you just follow these [notes](https://devcenter.heroku.com/articles/getting-started-with-ruby).  Notable differences:
 
+You need `gem 'grappling'`, not `gem 'sinatra'` in your Gemfile.
+
+Add `set port, ENV["PORT"]` to your application file.
+
+Your Procfile should look like:
+
+    web: bundle exec grapple go my_application.rb
+    worker: bundle exec grapple do my_application.rb
 
 #Other Random Notes
 
@@ -81,7 +89,7 @@ PagerDuty collapses a bunch of events into a single Webhook call.  We split them
 
 ##Use ssh port forwarding to expose your development endpoint
 
-This sets up a tunnel so host:8888 forwards to localhost:4567
+For hack days, this is how I prefer to work instead of actually hosting this somewhere.  This sets up a tunnel so host:8888 forwards to localhost:4567
 
     ssh -R *:8888:localhost:4567 username@host
 
